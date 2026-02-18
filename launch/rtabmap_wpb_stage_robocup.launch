@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="rgb_topic"               default="/kinect2/qhd/image_color_rect" />
+  <arg name="depth_topic"             default="/kinect2/sd/image_depth_rect" />
+  <arg name="camera_info_topic"       default="/kinect2/qhd/camera_info" />
+  
+  <arg name="frame_id"                default="base_footprint"/>
+  <arg name="rtabmap_viz"             default="true" />
+  <arg name="use_sim_time"            default="true"/>
+  <arg name="approx_sync"             default="true"/> 
+
+  <include file="$(find rtabmap_launch)/launch/rtabmap.launch">
+    <arg name="rtabmap_viz"        value="$(arg rtabmap_viz)" />
+    <arg name="use_sim_time"       value="$(arg use_sim_time)"/>
+    <arg name="frame_id"           value="$(arg frame_id)"/>
+    
+    <arg name="rgb_topic"          value="$(arg rgb_topic)" />
+    <arg name="depth_topic"        value="$(arg depth_topic)" />
+    <arg name="camera_info_topic"  value="$(arg camera_info_topic)" />
+    
+    <arg name="visual_odometry"    value="false"/>
+    <arg name="odom_topic"         value="/odom"/>
+    
+    <arg name="approx_sync"        value="$(arg approx_sync)"/>
+    
+    <arg name="args"               value="--delete_db_on_start"/>
+  </include>
+
+  <node pkg="tf" type="static_transform_publisher" name="camera_correction_final" 
+      args="0 0 0 -1.5708 0 -1.95 kinect2_dock kinect2_head_frame 10" />
+
+</launch>
